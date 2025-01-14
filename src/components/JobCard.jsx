@@ -1,6 +1,6 @@
 import React from 'react'
 import {assets} from '../assets/assets'
-import {useNavigate, useNavigation} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 const JobCard = ({job}) => {
 
   const navigate = useNavigate()

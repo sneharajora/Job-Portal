@@ -1,29 +1,45 @@
-import React, { useState,useContext,useEffect} from "react";
-import { assets, jobsData } from "../assets/assets";
+import React, { useState, useContext, useEffect } from "react";
+import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
+
 const RecruiterLogin = () => {
   const [state, setState] = useState("Login");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [image, setImage] = useState("false");
+  const [image, setImage] = useState(null);
   const [isTextDataSubmitted, setIsTextDataSubmitted] = useState(false);
-  
-  const {setShowRecruiterLogin}  = useContext(AppContext)
+
+  const { setShowRecruiterLogin } = useContext(AppContext);
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    if (state === "Sign Up" && !isTextDataSubmitted) {
-      setIsTextDataSubmitted(true);
+    
+    
+    if (state === "Login") {
+      console.log("Logging in with", { email, password });
+      
+      setShowRecruiterLogin(false);
     }
-  } 
 
-    useEffect(()=>{
-    document.body.style.overflow = 'hidden'
+    
+    if (state === "Sign Up") {
+      if (!isTextDataSubmitted) {
+        setIsTextDataSubmitted(true);
+      } else {
+        console.log("Signing up with", { name, email, password, image });
+       
+        setShowRecruiterLogin(false);
+      }
+    }
+  };
 
-       return ()=>{
-        document.body.style.overflow = 'unset'
-       }
-    },[])
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center ">
@@ -32,13 +48,22 @@ const RecruiterLogin = () => {
           Recruiter {state}
         </h1>
         <p className="text-sm">Welcome back! Please sign in to continue</p>
-        
+
         {state === "Sign Up" && isTextDataSubmitted ? (
           <>
             <div className="flex items-center gap-4 my-10">
               <label htmlFor="image">
-                <img className="w-16 rounded-full" src={image ? URL.createObjectURL(image):assets.upload_area} alt="" />
-                <input onChange={e=>setImage(e.target.files[0])} type="file" id="image" hidden />
+                <img
+                  className="w-16 rounded-full"
+                  src={image ? URL.createObjectURL(image) : assets.upload_area}
+                  alt="Upload"
+                />
+                <input
+                  onChange={(e) => setImage(e.target.files[0])}
+                  type="file"
+                  id="image"
+                  hidden
+                />
               </label>
               <p>Upload Company <br />logo</p>
             </div>
@@ -84,8 +109,8 @@ const RecruiterLogin = () => {
             </div>
           </>
         )}
-        
-       {state === "Login" && <p className="text-sm text-blue-600 mt-4 cursor-pointer">Forgot Password? </p> }
+
+        {state === "Login" && <p className="text-sm text-blue-600 mt-4 cursor-pointer">Forgot Password?</p>}
 
         <button type="submit" className="bg-blue-600 w-full text-white py-2 rounded-full mt-4">
           {state === "Login" ? "Login" : isTextDataSubmitted ? "Create Account" : "Next"}
@@ -112,7 +137,13 @@ const RecruiterLogin = () => {
             </span>
           </p>
         )}
-         <img onClick={e => setShowRecruiterLogin(false)} className="absolute top-5 right-5 cursor-pointer" src={assets.cross_icon}></img> 
+
+        <img
+          onClick={() => setShowRecruiterLogin(false)}
+          className="absolute top-5 right-5 cursor-pointer"
+          src={assets.cross_icon}
+          alt="Close"
+        />
       </form>
     </div>
   );
